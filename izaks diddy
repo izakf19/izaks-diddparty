@@ -1,0 +1,78 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Create UI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player.PlayerGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0.18, 0, 0.18, 0) -- Slightly bigger UI
+frame.Position = UDim2.new(0.8, 0, 0.7, 0) -- Bottom-right corner
+frame.BackgroundTransparency = 1 -- Fully see-through
+frame.Parent = screenGui
+
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 0.3, 0)
+textLabel.Text = "Neo's Diddy Party 😈🍆"
+textLabel.TextColor3 = Color3.fromRGB(170, 85, 255) -- Purple text
+textLabel.BackgroundTransparency = 1
+textLabel.Font = Enum.Font.SourceSansBold
+textLabel.TextScaled = true
+textLabel.Parent = frame
+
+local function createButton(name, position, teleportPos)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0.22, 0)
+    button.Position = UDim2.new(0, 0, position, 0)
+    button.Text = name
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundTransparency = 1 -- Fully see-through
+    button.Font = Enum.Font.SourceSansBold
+    button.TextScaled = true
+    button.Parent = frame
+
+    button.MouseButton1Click:Connect(function()
+        if hrp then
+            hrp.CFrame = CFrame.new(teleportPos)
+        end
+    end)
+end
+
+-- Create buttons
+createButton("Teleport", 0.3, Vector3.new(10012.2, 10036.4, 10001.4))
+createButton("Home", 0.55, Vector3.new(202.7, 40.87, 62.43))
+createButton("Hot Tub", 0.8, Vector3.new(9999.03, 10053.98, 10015.86))
+
+-- Make UI draggable
+local dragging, dragInput, dragStart, startPos
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(
+            startPos.X.Scale, startPos.X.Offset + delta.X,
+            startPos.Y.Scale, startPos.Y.Offset + delta.Y
+        )
+    end
+end)
