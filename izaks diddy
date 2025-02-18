@@ -1,12 +1,5 @@
 local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local hrp = character:WaitForChild("HumanoidRootPart")
-
--- Create UI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = player.PlayerGui
-
-local frame = Instance.new("Frame")
+local character = player.Character or player.CharacterAdd")
 frame.Size = UDim2.new(0.18, 0, 0.18, 0) -- Slightly bigger UI
 frame.Position = UDim2.new(0.8, 0, 0.7, 0) -- Bottom-right corner
 frame.BackgroundTransparency = 1 -- Fully see-through
